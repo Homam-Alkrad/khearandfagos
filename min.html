@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منحنى سرعة التفاعل - تأثير العامل المساعد</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .logo svg {
+            width: 50px;
+            height: 50px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-without {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .btn-with {
+            background: linear-gradient(45deg, #00d2d3, #54a0ff);
+            color: white;
+        }
+
+        .btn-both {
+            background: linear-gradient(45deg, #5f27cd, #341f97);
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        #reactionChart {
+            width: 100%;
+            height: 500px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .info-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .info-card p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .without-catalyst {
+            background: #ff6b6b;
+        }
+
+        .with-catalyst {
+            background: #00d2d3;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Molecules -->
+                    <circle cx="20" cy="30" r="4" fill="white" opacity="0.9"/>
+                    <circle cx="30" cy="25" r="4" fill="white" opacity="0.9"/>
+                    <circle cx="25" cy="15" r="4" fill="white" opacity="0.9"/>
+                    
+                    <!-- Catalyst -->
+                    <circle cx="50" cy="30" r="6" fill="#FFD700" opacity="0.9"/>
+                    
+                    <!-- Product molecules -->
+                    <circle cx="75" cy="25" r="4" fill="white" opacity="0.9"/>
+                    <circle cx="85" cy="30" r="4" fill="white" opacity="0.9"/>
+                    <circle cx="80" cy="15" r="4" fill="white" opacity="0.9"/>
+                    
+                    <!-- Bonds -->
+                    <line x1="22" y1="28" x2="28" y2="27" stroke="white" stroke-width="2" opacity="0.7"/>
+                    <line x1="27" y1="23" x2="25" y2="19" stroke="white" stroke-width="2" opacity="0.7"/>
+                    <line x1="77" y1="23" x2="83" y2="28" stroke="white" stroke-width="2" opacity="0.7"/>
+                    <line x1="82" y1="28" x2="80" y2="19" stroke="white" stroke-width="2" opacity="0.7"/>
+                    
+                    <!-- Energy curve -->
+                    <path d="M 15 60 Q 35 45 50 50 Q 65 55 85 65" stroke="white" stroke-width="3" fill="none" opacity="0.8"/>
+                    
+                    <!-- Arrow -->
+                    <path d="M 35 75 L 65 75" stroke="white" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Arrow marker -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+                                refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="white" />
+                        </marker>
+                    </defs>
+                    
+                    <!-- Sparks/energy -->
+                    <circle cx="45" cy="40" r="1.5" fill="#FFD700">
+                        <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="55" cy="35" r="1.5" fill="#FFD700">
+                        <animate attributeName="opacity" values="0;1;0" dur="1.5s" begin="0.5s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="50" cy="45" r="1.5" fill="#FFD700">
+                        <animate attributeName="opacity" values="0;1;0" dur="1.5s" begin="1s" repeatCount="indefinite"/>
+                    </circle>
+                </svg>
+            </div>
+            <h1>تأثير العامل المساعد على سرعة التفاعل</h1>
+        </div>
+        
+        <div class="controls">
+            <button class="btn-without" onclick="showWithoutCatalyst()">بدون عامل مساعد</button>
+            <button class="btn-with" onclick="showWithCatalyst()">مع عامل مساعد</button>
+            <button class="btn-both" onclick="showBoth()">المقارنة</button>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="reactionChart"></canvas>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color without-catalyst"></div>
+                <span>بدون عامل مساعد (طاقة تنشيط عالية)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color with-catalyst"></div>
+                <span>مع عامل مساعد (طاقة تنشيط منخفضة)</span>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <div class="info-card">
+                <h3>العامل المساعد (المحفز)</h3>
+                <p>العامل المساعد هو مادة تزيد من سرعة التفاعل الكيميائي دون أن تستهلك في التفاعل.</p>
+                <p>يعمل المحفز على توفير مسار بديل للتفاعل بطاقة تنشيط أقل.</p>
+                <p>نتيجة لذلك، يصبح عدد أكبر من الجزيئات قادر على التفاعل عند نفس درجة الحرارة.</p>
+            </div>
+            
+            <div class="info-card">
+                <h3>طاقة التنشيط</h3>
+                <p>طاقة التنشيط هي الحد الأدنى من الطاقة المطلوبة لبدء التفاعل الكيميائي.</p>
+                <p>كلما قلت طاقة التنشيط، زادت سرعة التفاعل.</p>
+                <p>المحفز يقلل من طاقة التنشيط مما يسرع التفاعل بشكل كبير.</p>
+            </div>
+            
+            <div class="info-card">
+                <h3>تفسير المنحنى</h3>
+                <p>المنحنى الأحمر يمثل التفاعل بدون محفز (طاقة تنشيط عالية).</p>
+                <p>المنحنى الأزرق يمثل التفاعل مع محفز (طاقة تنشيط منخفضة).</p>
+                <p>ارتفاع القمة يمثل طاقة التنشيط المطلوبة للتفاعل.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('reactionChart');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Animation variables
+        let animationProgress = 0;
+        let isAnimating = false;
+        let currentMode = 'both';
+
+        function drawAxes() {
+            const width = canvas.clientWidth;
+            const height = canvas.clientHeight;
+            
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 2;
+            
+            // Y-axis
+            ctx.beginPath();
+            ctx.moveTo(80, 50);
+            ctx.lineTo(80, height - 80);
+            ctx.stroke();
+            
+            // X-axis
+            ctx.beginPath();
+            ctx.moveTo(80, height - 80);
+            ctx.lineTo(width - 50, height - 80);
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'center';
+            
+            // Y-axis label
+            ctx.save();
+            ctx.translate(30, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('الطاقة', 0, 0);
+            ctx.restore();
+            
+            // X-axis label
+            ctx.fillText('تقدم التفاعل', width / 2, height - 30);
+            
+            // Reactants and Products labels
+            ctx.font = '12px Arial';
+            ctx.fillText('المواد المتفاعلة', 150, height - 60);
+            ctx.fillText('النواتج', width - 120, height - 60);
+        }
+
+        function drawEnergyProfile(color, activationHeight, showLabel = true) {
+            const width = canvas.clientWidth;
+            const height = canvas.clientHeight;
+            
+            const startX = 80;
+            const endX = width - 50;
+            const baseY = height - 80;
+            const reactantLevel = baseY - 100;
+            const productLevel = baseY - 120;
+            const peakY = baseY - activationHeight;
+            
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            // Draw the energy profile curve
+            const points = [];
+            const numPoints = 100;
+            
+            for (let i = 0; i <= numPoints; i++) {
+                const t = i / numPoints;
+                const x = startX + (endX - startX) * t;
+                let y;
+                
+                if (t < 0.1) {
+                    // Reactants level
+                    y = reactantLevel;
+                } else if (t < 0.5) {
+                    // Rising to peak
+                    const localT = (t - 0.1) / 0.4;
+                    const curve = Math.sin(localT * Math.PI * 0.5);
+                    y = reactantLevel - (reactantLevel - peakY) * curve;
+                } else if (t < 0.6) {
+                    // At peak
+                    y = peakY;
+                } else if (t < 0.9) {
+                    // Falling to products
+                    const localT = (t - 0.6) / 0.3;
+                    const curve = Math.cos(localT * Math.PI * 0.5);
+                    y = peakY - (peakY - productLevel) * (1 - curve);
+                } else {
+                    // Products level
+                    y = productLevel;
+                }
+                
+                points.push({ x, y });
+            }
+            
+            // Animate the drawing
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            
+            const maxIndex = Math.floor(points.length * animationProgress);
+            for (let i = 1; i <= maxIndex; i++) {
+                ctx.lineTo(points[i].x, points[i].y);
+            }
+            
+            ctx.stroke();
+            
+            // Draw activation energy arrow and label
+            if (showLabel && animationProgress > 0.7) {
+                const arrowX = startX + (endX - startX) * 0.3;
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                
+                // Arrow
+                ctx.beginPath();
+                ctx.moveTo(arrowX, reactantLevel);
+                ctx.lineTo(arrowX, peakY);
+                ctx.stroke();
+                
+                // Arrow head
+                ctx.beginPath();
+                ctx.moveTo(arrowX - 5, peakY + 10);
+                ctx.lineTo(arrowX, peakY);
+                ctx.lineTo(arrowX + 5, peakY + 10);
+                ctx.stroke();
+                
+                // Label
+                ctx.fillStyle = color;
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'center';
+                const labelText = activationHeight > 200 ? 'طاقة تنشيط عالية' : 'طاقة تنشيط منخفضة';
+                ctx.fillText(labelText, arrowX + 60, (reactantLevel + peakY) / 2);
+            }
+        }
+
+        function animate() {
+            if (!isAnimating) return;
+            
+            const width = canvas.clientWidth;
+            const height = canvas.clientHeight;
+            
+            ctx.clearRect(0, 0, width, height);
+            
+            drawAxes();
+            
+            if (currentMode === 'without' || currentMode === 'both') {
+                drawEnergyProfile('#ff6b6b', 250, currentMode === 'without');
+            }
+            
+            if (currentMode === 'with' || currentMode === 'both') {
+                drawEnergyProfile('#00d2d3', 150, currentMode === 'with');
+            }
+            
+            animationProgress += 0.02;
+            
+            if (animationProgress >= 1) {
+                animationProgress = 1;
+                isAnimating = false;
+            }
+            
+            if (isAnimating) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        function startAnimation(mode) {
+            currentMode = mode;
+            animationProgress = 0;
+            isAnimating = true;
+            animate();
+        }
+
+        function showWithoutCatalyst() {
+            startAnimation('without');
+        }
+
+        function showWithCatalyst() {
+            startAnimation('with');
+        }
+
+        function showBoth() {
+            startAnimation('both');
+        }
+
+        // Initialize with both curves
+        showBoth();
+    </script>
+</body>
+</html>
