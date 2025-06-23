@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Programming Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-header {
+            background: linear-gradient(45deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .form-header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .form-header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .form-content {
+            padding: 40px;
+        }
+
+        .code-section {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+            border-left: 4px solid #4f46e5;
+            white-space: pre-wrap;
+        }
+
+        .code-section .keyword {
+            color: #569cd6;
+        }
+
+        .code-section .string {
+            color: #ce9178;
+        }
+
+        .code-section .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-section .type {
+            color: #4ec9b0;
+        }
+
+        .question-section {
+            margin-top: 30px;
+        }
+
+        .question-title {
+            font-size: 1.4em;
+            color: #374151;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .option:hover {
+            border-color: #4f46e5;
+            background: #f8faff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+            accent-color: #4f46e5;
+        }
+
+        .option label {
+            cursor: pointer;
+            font-size: 1.05em;
+            color: #374151;
+            line-height: 1.5;
+        }
+
+        .option.selected {
+            border-color: #4f46e5;
+            background: #f0f4ff;
+        }
+
+        .submit-container {
+            margin-top: 35px;
+            text-align: center;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 500;
+            display: none;
+        }
+
+        .result.correct {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #10b981;
+        }
+
+        .result.incorrect {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #ef4444;
+        }
+
+        @media (max-width: 768px) {
+            .form-content {
+                padding: 25px;
+            }
+            
+            .code-section {
+                font-size: 12px;
+                padding: 20px;
+            }
+            
+            .form-header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h1>Programming Quiz</h1>
+        </div>
+        
+        <div class="form-content">
+            <div class="code-section"><span class="keyword">public abstract class</span> <span class="type">Vehicle</span>
+{
+    <span class="keyword">protected string</span> brand;
+    
+    <span class="keyword">public</span> <span class="type">Vehicle</span>(<span class="keyword">string</span> brand)
+    {
+        <span class="keyword">this</span>.brand = brand;
+    }
+    
+    <span class="keyword">public virtual void</span> Start()
+    {
+        <span class="type">Console</span>.WriteLine(<span class="string">$"Starting {brand} vehicle"</span>);
+    }
+    
+    <span class="keyword">public virtual void</span> Start(<span class="keyword">string</span> message)
+    {
+        <span class="type">Console</span>.WriteLine(<span class="string">$"{message} - {brand}"</span>);
+    }
+    
+    <span class="keyword">public void</span> Drive()
+    {
+        <span class="type">Console</span>.WriteLine(<span class="string">$"Driving the {brand} vehicle"</span>);
+    }
+}
+
+<span class="keyword">public sealed class</span> <span class="type">Car</span> : <span class="type">Vehicle</span>
+{
+    <span class="keyword">private int</span> doors;
+    
+    <span class="keyword">public</span> <span class="type">Car</span>(<span class="keyword">string</span> brand, <span class="keyword">int</span> doors) : <span class="keyword">base</span>(brand)
+    {
+        <span class="keyword">this</span>.doors = doors;
+    }
+    
+    <span class="keyword">public override void</span> Start()
+    {
+        <span class="type">Console</span>.WriteLine(<span class="string">$"Car engine starting - {brand} with {doors} doors"</span>);
+    }
+    
+    <span class="keyword">public new void</span> Drive()
+    {
+        <span class="type">Console</span>.WriteLine(<span class="string">$"Driving the {doors}-door {brand} car"</span>);
+    }
+}</div>
+            
+            <div class="question-section">
+                <h2 class="question-title">Which of the following statements is TRUE based on the above code?</h2>
+                
+                <form id="quizForm">
+                    <div class="options-container">
+                        <div class="option">
+                            <input type="radio" id="option1" name="answer" value="abstract">
+                            <label for="option1">The Vehicle class is abstract class so it cannot be inherited</label>
+                        </div>
+                        
+                        <div class="option">
+                            <input type="radio" id="option2" name="answer" value="sealed">
+                            <label for="option2">The Car class is sealed class so it cannot be instantiated</label>
+                        </div>
+                        
+                        <div class="option">
+                            <input type="radio" id="option3" name="answer" value="polymorphism">
+                            <label for="option3">The code shows multiple forms of behavior where methods can have different implementations depending on their signature or overriding context</label>
+                        </div>
+                        
+                        <div class="option">
+                            <input type="radio" id="option4" name="answer" value="inheritance">
+                            <label for="option4">Creating a Car object allows modification and output of the brand property inherited from the parent class</label>
+                        </div>
+                    </div>
+                    
+                    <div class="submit-container">
+                        <button type="submit" class="submit-btn" id="submitBtn" disabled>Submit Answer</button>
+                    </div>
+                    
+                    <div class="result" id="result"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('quizForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const result = document.getElementById('result');
+        const options = document.querySelectorAll('.option');
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
+        
+        // Correct answer
+        const correctAnswer = 'polymorphism';
+        
+        // Enable submit button when an option is selected
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', () => {
+                submitBtn.disabled = false;
+                
+                // Update visual selection
+                options.forEach(option => option.classList.remove('selected'));
+                radio.closest('.option').classList.add('selected');
+            });
+        });
+        
+        // Handle option clicks
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                const radio = option.querySelector('input[type="radio"]');
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change'));
+            });
+        });
+        
+        // Handle form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked').value;
+            
+            // Show result
+            result.style.display = 'block';
+            
+            if (selectedAnswer === correctAnswer) {
+                result.className = 'result correct';
+                result.innerHTML = `
+                    <strong>✅ Correct!</strong><br>
+                    The code shows polymorphism through both method overloading (two Start() methods with different parameters) 
+                    and method overriding (Car class overrides the Start() method from Vehicle class). This shows compile-time and runtime polymorphism where methods can take multiple forms.
+                `;
+            } else {
+                result.className = 'result incorrect';
+                let explanation = '';
+                
+                switch(selectedAnswer) {
+                    case 'abstract':
+                        explanation = 'FALSE - Abstract classes CAN be inherited. They just cannot be instantiated directly. The Car class inherits from Vehicle successfully.';
+                        break;
+                    case 'sealed':
+                        explanation = 'FALSE - Sealed classes CAN be instantiated. They just cannot be inherited by other classes.';
+                        break;
+                    case 'inheritance':
+                        explanation = 'While inheritance is present and working correctly in this code, the more complex concept being shown here is polymorphism.';
+                        break;
+                }
+                
+                result.innerHTML = `
+                    <strong>❌ Incorrect</strong><br>
+                    ${explanation}<br><br>
+                    <strong>Correct Answer:</strong> The code exhibits multiple forms of behavior where methods can have different implementations depending on their signature or overriding context.
+                `;
+            }
+            
+            // Disable form after submission
+            submitBtn.disabled = true;
+            radioButtons.forEach(radio => radio.disabled = true);
+        });
+    </script>
+</body>
+</html>
