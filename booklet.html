@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أدوات إنشاء الكتيبات الاحترافية</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease-out;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .tool-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideInUp 0.8s ease-out forwards;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .tool-card:nth-child(1) { animation-delay: 0.1s; }
+        .tool-card:nth-child(2) { animation-delay: 0.2s; }
+        .tool-card:nth-child(3) { animation-delay: 0.3s; }
+        .tool-card:nth-child(4) { animation-delay: 0.4s; }
+        .tool-card:nth-child(5) { animation-delay: 0.5s; }
+        
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .canva { background: linear-gradient(45deg, #00c4cc, #7b68ee); }
+        .chatgpt { background: linear-gradient(45deg, #10a37f, #1a7f37); }
+        .claude { background: linear-gradient(45deg, #d97706, #f59e0b); }
+        .copilot { background: linear-gradient(45deg, #0078d4, #106ebe); }
+        .indesign { background: linear-gradient(45deg, #ff61f6, #fe0000); }
+        .overleaf { background: linear-gradient(45deg, #138A07, #4CAF50); }
+        
+        .tool-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .tool-subtitle {
+            color: #718096;
+            font-size: 1rem;
+        }
+        
+        .tool-description {
+            color: #4a5568;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .features-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+        
+        .features-list li {
+            padding: 8px 0;
+            color: #2d3748;
+            position: relative;
+            padding-right: 25px;
+            font-size: 1rem;
+        }
+        
+        .features-list li::before {
+            content: "✓";
+            position: absolute;
+            right: 0;
+            color: #38a169;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .link-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            font-size: 1rem;
+        }
+        
+        .link-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .footer h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .shape {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 20%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+        
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .tool-card {
+                padding: 20px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    
+    <div class="container">
+        <div class="hero">
+            <h1>أدوات إنشاء الكتيبات الاحترافية</h1>
+            <p>اكتشف أقوى الأدوات لإنشاء كتيبات تعليمية وإرشادية احترافية</p>
+        </div>
+        
+        <div class="tools-grid">
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon canva">C</div>
+                    <div>
+                        <div class="tool-title">Canva</div>
+                        <div class="tool-subtitle">أداة التصميم السهلة</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    أداة تصميم سهلة وسريعة مناسبة للمعلمين والطلاب لتصميم كتيبات تعليمية جذابة.
+                </div>
+                <ul class="features-list">
+                    <li>قوالب جاهزة للكتيبات</li>
+                    <li>إضافة صور ونصوص وجداول بسهولة</li>
+                    <li>دعم ممتاز للغة العربية</li>
+                    <li>تصدير PDF للطباعة والمشاركة</li>
+                    <li>مناسب للكتيبات البسيطة والمتوسطة</li>
+                </ul>
+                <a href="https://www.canva.com" target="_blank" class="link-button">زيارة الموقع</a>
+            </div>
+            
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon chatgpt">AI</div>
+                    <div>
+                        <div class="tool-title">ChatGPT</div>
+                        <div class="tool-subtitle">مولد المحتوى الذكي</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    أداة ذكية لتوليد وتحسين محتوى الكتيبات بجودة عالية ولغة احترافية.
+                </div>
+                <ul class="features-list">
+                    <li>توليد المحتوى والمقالات</li>
+                    <li>إعادة صياغة وتحسين اللغة</li>
+                    <li>اقتراح أفكار وتنظيم الأقسام</li>
+                    <li>كتابة بأسلوب احترافي أو مبسط</li>
+                    <li>إنشاء عناوين جذابة</li>
+                </ul>
+                <a href="https://chat.openai.com" target="_blank" class="link-button">زيارة الموقع</a>
+            </div>
+            
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon claude">CL</div>
+                    <div>
+                        <div class="tool-title">Claude AI</div>
+                        <div class="tool-subtitle">المساعد الذكي المتطور</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    أقوى أداة ذكية للمحتوى الطويل والتحليل العميق، مثالية للأدلة والكتيبات التربوية.
+                </div>
+                <ul class="features-list">
+                    <li>معالجة المحتوى الطويل والمعقد</li>
+                    <li>تحليل النصوص الكبيرة</li>
+                    <li>أسلوب راقٍ ومناسب للأدلة</li>
+                    <li>ممتاز للكتابة التربوية والإرشادية</li>
+                    <li>قدرات تحليلية متقدمة</li>
+                </ul>
+                <a href="https://claude.ai" target="_blank" class="link-button">زيارة الموقع</a>
+            </div>
+            
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon copilot">CP</div>
+                    <div>
+                        <div class="tool-title">Microsoft Copilot</div>
+                        <div class="tool-subtitle">المساعد الذكي المدمج</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    مساعد ذكي مدمج في Microsoft Word وPowerPoint لتحسين الإنتاجية أثناء الكتابة.
+                </div>
+                <ul class="features-list">
+                    <li>مساعدة في صياغة الفقرات</li>
+                    <li>تنسيق الجداول تلقائياً</li>
+                    <li>كتابة محتوى من رؤوس أقلام</li>
+                    <li>التكامل مع Microsoft Office</li>
+                    <li>تحسين جودة النصوص</li>
+                </ul>
+                <a href="https://copilot.microsoft.com" target="_blank" class="link-button">زيارة الموقع</a>
+            </div>
+            
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon indesign">ID</div>
+                    <div>
+                        <div class="tool-title">Adobe InDesign</div>
+                        <div class="tool-subtitle">الأداة الاحترافية للنشر</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    أقوى أداة احترافية لإنشاء كتيبات معقدة جاهزة للطباعة والنشر الاحترافي.
+                </div>
+                <ul class="features-list">
+                    <li>تصميم كتيبات طويلة ومعقدة</li>
+                    <li>تنسيق متقدم بأعمدة وهوامش</li>
+                    <li>فهرس وترقيم صفحات تلقائي</li>
+                    <li>إعداد احترافي للطباعة</li>
+                    <li>دعم للخطوط العربية</li>
+                </ul>
+                <a href="https://www.adobe.com/products/indesign.html" target="_blank" class="link-button">زيارة الموقع</a>
+            </div>
+            
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon overleaf">OL</div>
+                    <div>
+                        <div class="tool-title">Overleaf</div>
+                        <div class="tool-subtitle">محرر LaTeX الأكاديمي</div>
+                    </div>
+                </div>
+                <div class="tool-description">
+                    محرر LaTeX أونلاين احترافي لإنشاء وثائق أكاديمية وكتيبات علمية بجودة عالية.
+                </div>
+                <ul class="features-list">
+                    <li>تحرير LaTeX أونلاين بدون تثبيت</li>
+                    <li>قوالب أكاديمية وعلمية جاهزة</li>
+                    <li>معادلات رياضية احترافية</li>
+                    <li>تصدير PDF بجودة طباعة عالية</li>
+                    <li>تعاون جماعي في الوقت الفعلي</li>
+                    <li>مكتبة مراجع ومصادر مدمجة</li>
+                </ul>
+                <a href="https://www.overleaf.com" target="_blank" class="link-button">زيارة الموقع</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <h3>ابدأ رحلتك في إنشاء كتيبات احترافية اليوم!</h3>
+            <p>اختر الأداة المناسبة لمشروعك واحصل على نتائج مذهلة</p>
+        </div>
+    </div>
+    
+    <script>
+        // إضافة تأثيرات تفاعلية
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.tool-card');
+            
+            // تأثير المرور بالماوس للبطاقات
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // تأثير النقر على الأزرار
+            const buttons = document.querySelectorAll('.link-button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // إنشاء تأثير تموج
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: rgba(255,255,255,0.3);
+                        border-radius: 50%;
+                        transform: scale(0);
+                        animation: ripple 0.6s ease-out;
+                        pointer-events: none;
+                    `;
+                    
+                    this.style.position = 'relative';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+            
+            // إضافة CSS للتأثير المتموج
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(2);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // تأثير التمرير السلس
+            window.addEventListener('scroll', function() {
+                const cards = document.querySelectorAll('.tool-card');
+                cards.forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    const windowHeight = window.innerHeight;
+                    
+                    if (rect.top < windowHeight && rect.bottom > 0) {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
